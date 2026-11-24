@@ -1,6 +1,6 @@
 {
-  "name": "Tracker Pengeluaran",
-  "short_name": "Tracker",
+  "name": "Expense Tracker",
+  "short_name": "Expense Tracker",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#e8f1f0",

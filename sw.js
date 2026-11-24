@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trk-v1';
+const CACHE_NAME = 'trk-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -26,12 +26,9 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Jangan cache permintaan API Google (cross-origin)
   if (!event.request.url.startsWith(self.location.origin)) return;
-  // Jangan cache POST (hanya untuk keamanan, meski fetch index ini selalu GET)
   if (event.request.method !== 'GET') return;
 
-  // Stale-while-revalidate untuk aset lokal
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {

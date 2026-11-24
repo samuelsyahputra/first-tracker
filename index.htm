@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#e8f1f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com;">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="./icons/icon-180.png">
+<link rel="icon" type="image/png" href="./icons/icon-192.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>Expense Tracker</title>
+<style>
+:root{color-scheme:light;--bg:#e8f1f0;--b1:rgba(234,162,124,.7);--b2:rgba(14,137,145,.32);--b3:rgba(141,182,188,.75);--card:rgba(255,255,255,.55);--gb:rgba(255,255,255,.8);--tx:#0c313a;--mut:#55767b;--br:rgba(12,49,58,.12);--sheet:rgba(240,248,247,.8);--navbg:rgba(255,255,255,.6);--hero:linear-gradient(135deg,#0c313a 0%,#0e8991 100%);--htx:#fff;--hmut:rgba(255,255,255,.74);--fab:linear-gradient(135deg,#eaa27c,#e8bba8);--fabtx:#0c313a;--out:#e11d48;--in:#16a34a;--ac:#0b7a82;--on:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 "Plus Jakarta Sans",system-ui,-apple-system,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+.hide{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:5;background:var(--navbg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(10px + env(safe-area-inset-top)) 16px 8px}
+.mon{max-width:480px;margin:0 auto;display:flex;align-items:center;gap:8px}
+.mon b{flex:1;text-align:center;font-size:18px;text-transform:capitalize}
+.mon button{width:40px;height:40px;border:1px solid var(--gb);border-radius:50%;background:var(--card)}
+main{max-width:480px;margin:0 auto;padding:4px 16px;transition:opacity .15s}
+.busy main{opacity:.45}
+section>h2{font-size:15px;margin:22px 0 8px;font-weight:700}
+.hero{background:var(--hero);color:var(--htx);border-radius:28px;padding:22px;border:1px solid rgba(255,255,255,.25);box-shadow:0 14px 34px rgba(12,49,58,.35),inset 0 1px 0 rgba(255,255,255,.3)}
+.hero small{color:var(--hmut);font-size:13px;display:block}
+.big{font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin:4px 0 2px}
+.big span{font-size:20px;font-weight:600;opacity:.8;margin-right:2px}
+.chg{font-size:13px;color:var(--hmut)}
+.sbar{display:flex;gap:3px;height:20px;padding:4px;background:rgba(255,255,255,.2);border-radius:99px;margin:16px 0}
+.sbar i{border-radius:99px;min-width:6px}
+.hrow{display:flex;gap:10px}.hrow>div{flex:1;background:rgba(255,255,255,.14);border-radius:16px;padding:10px 12px}
+.hrow b{font-size:17px}
+.card{background:var(--card);border:1px solid var(--gb);border-radius:20px;padding:16px}
+.kb{margin:0 0 12px}.kb:last-child{margin:0}
+.kb div{display:flex;justify-content:space-between;gap:8px}
+.kb small{color:var(--mut)}
+.track{height:8px;background:var(--br);border-radius:4px;margin-top:6px;overflow:hidden}
+.track i{display:block;height:100%;border-radius:4px}
+.tx{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--br)}
+.tx:last-child{border:0}
+.av{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-style:normal}
+.tm small{display:block;color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:46vw}
+.neg{color:var(--out);font-weight:700}.pos{color:var(--in);font-weight:700}
+.act{grid-column:1/-1;display:none;justify-content:flex-end}
+.tx.open .act{display:flex}
+.del{border:1px solid var(--out);color:var(--out);background:none;border-radius:10px;padding:8px 14px}
+.del.sure{background:var(--out);color:#fff}
+.dh{font-size:13px;color:var(--mut);margin:16px 0 4px}
+.seg{display:flex;background:var(--card);border:1px solid var(--gb);border-radius:12px;padding:3px;margin:8px 0}
+.seg button{flex:1;border:0;background:none;color:var(--mut);padding:9px;border-radius:9px;font-weight:600}
+.seg button.on{background:var(--ac);color:var(--on)}
+.cv{position:relative;height:210px}
+.lg{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--br)}
+.lg i{width:12px;height:12px;border-radius:4px;flex:none}
+.lg span{flex:1}.lg em{color:var(--mut);font-style:normal;font-size:13px}
+.empty{color:var(--mut);text-align:center;padding:26px 8px}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.st small{display:block;color:var(--mut);font-size:12px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;background:var(--navbg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--br);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+nav button{border:0;background:none;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;padding:6px 0}
+nav button.on{color:var(--ac)}
+nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+nav .fab{width:56px;height:56px;border-radius:50%;background:var(--fab);color:var(--fabtx);margin:0 auto;margin-top:-30px;justify-content:center;border:4px solid var(--bg);box-shadow:0 8px 22px rgba(234,162,124,.5)}
+nav .fab svg{width:26px;height:26px;stroke-width:2.5}
+.bd{position:fixed;inset:0;z-index:8;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s}
+.bd.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--sheet);backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);border:1px solid var(--gb);border-bottom:0;border-radius:24px 24px 0 0;max-height:92vh;overflow:auto;padding:16px 16px calc(20px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .25s ease;max-width:520px;margin:0 auto}
+.sheet.open{transform:none}
+.sh{display:flex;justify-content:space-between;align-items:center}
+.sh b{font-size:18px}
+.sh button{border:0;background:var(--card);width:36px;height:36px;border-radius:50%}
+label{display:block;margin:16px 0 6px;color:var(--mut);font-size:14px}
+input,select{width:100%;padding:12px;font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--gb);border-radius:12px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.amt{display:flex;align-items:baseline;gap:8px;border-bottom:2px solid var(--tx);padding:4px 0;margin-top:14px}
+.amt span{color:var(--mut);font-size:20px}
+.amt input{border:0;background:none;padding:0;font-size:42px;font-weight:800;letter-spacing:-1px}
+.amt input:focus{outline:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 14px;border-radius:99px;border:1px solid var(--gb);background:var(--card)}
+.chip.add{border-style:dashed;color:var(--mut)}
+.chip.on{background:var(--ac);border-color:var(--ac);color:var(--on)}
+#baru{margin-top:10px}
+.btn{width:100%;margin-top:22px;padding:15px;border:0;border-radius:14px;background:var(--hero);color:var(--htx);font-weight:700;font-size:17px;box-shadow:0 8px 20px rgba(14,137,145,.35);display:inline-flex;align-items:center;justify-content:center;gap:10px}
+.btn:disabled{opacity:.65}
+.spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));z-index:10;transform:translate(-50%,16px);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:.2s;max-width:90%;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.err{background:var(--out);color:#fff}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(70% 38% at 8% 2%,var(--b1),transparent 70%),radial-gradient(60% 36% at 100% 22%,var(--b2),transparent 70%),radial-gradient(70% 40% at 0% 100%,var(--b3),transparent 70%)}
+.card,.seg,.mon button,input,select,.chip{backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%)}
+.card{box-shadow:0 8px 24px rgba(12,49,58,.08),inset 0 1px 0 rgba(255,255,255,.35)}
+.av.neg{background:color-mix(in srgb,var(--out) 16%,transparent)}
+.av.pos{background:color-mix(in srgb,var(--in) 16%,transparent)}
+
+/* Setup UI khusus PWA */
+#p-setup{position:fixed;inset:0;z-index:99;background:var(--bg);padding:calc(20px + env(safe-area-inset-top)) 20px;overflow:auto;display:flex;flex-direction:column;justify-content:center}
+#p-setup h1{font-size:24px;margin-bottom:8px;text-align:center}
+#p-setup p{color:var(--mut);text-align:center;font-size:14px;margin-bottom:24px}
+#p-setup .pwd-wrap{position:relative}
+#p-setup .pwd-wrap button{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--ac);font-weight:bold;font-size:13px}
+.cfg-reset{margin:20px auto 0;display:block;background:none;border:1px solid var(--gb);padding:8px 16px;border-radius:10px;color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div id="p-setup" class="hide">
+  <h1>Hello!</h1>
+  <p>Enter your Apps Script URL & Token to connect this app to your Google Sheet.</p>
+  <label for="setup-url">Apps Script URL (/exec)</label>
+  <input id="setup-url" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" spellcheck="false">
+  
+  <label for="setup-token" style="margin-top:16px;">App Token</label>
+  <div class="pwd-wrap">
+    <input id="setup-token" type="password" placeholder="Paste token here" autocomplete="off" spellcheck="false">
+    <button id="setup-toggle" type="button">SHOW</button>
+  </div>
+  
+  <button id="setup-btn" class="btn" style="margin-top:32px;">Connect</button>
+</div>
+
+<!-- KONTEN APLIKASI -->
+<div id="app-content">
+  <header><div class="mon"><button id="prev" aria-label="Previous month">◀</button><b id="bln"></b><button id="next" aria-label="Next month">▶</button></div></header>
+  <main>
+    <section id="p-home">
+      <div class="hero" id="hero"><small>Loading data…</small></div>
+      <h2>Expenses by category</h2>
+      <div class="card" id="topk"></div>
+      <h2>Recent transactions</h2>
+      <div class="card" id="recent"></div>
+    </section>
+
+    <section id="p-list" class="hide">
+      <div class="seg" id="flt"><button data-v="all" class="on">All</button><button data-v="Pengeluaran">Expense</button><button data-v="Pemasukan">Income</button></div>
+      <div id="txs"></div>
+    </section>
+
+    <section id="p-rep" class="hide">
+      <div class="seg" id="ctipe"><button data-v="Pengeluaran" class="on">Expense</button><button data-v="Pemasukan">Income</button></div>
+      <div class="card"><div class="cv"><canvas id="c1"></canvas></div></div>
+      <div id="leg"></div>
+      <h2>Daily</h2>
+      <div class="card"><div class="cv"><canvas id="c2"></canvas></div></div>
+    </section>
+
+    <section id="p-tren" class="hide">
+      <h2>Last 6 months</h2>
+      <div class="card"><div class="cv"><canvas id="c3"></canvas></div></div>
+      <div class="st" id="tst"></div>
+      <button id="reset-cfg" class="cfg-reset">Reset API Settings</button>
+    </section>
+  </main>
+
+  <nav>
+    <button data-t="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+    <button data-t="list"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Transactions</button>
+    <button class="fab" id="add" aria-label="Add transaction"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button data-t="rep"><svg viewBox="0 0 24 24"><path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Reports</button>
+    <button data-t="tren"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Trends</button>
+  </nav>
+
+  <div class="bd" id="bd"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-label="Add transaction">
+    <div class="sh"><b>New transaction</b><button id="close" aria-label="Close">✕</button></div>
+    <div class="seg" id="tipe"><button data-v="Pengeluaran" class="on">Expense</button><button data-v="Pemasukan">Income</button></div>
+    <div class="amt"><span>Rp</span><input id="nom" inputmode="numeric" placeholder="0" autocomplete="off" aria-label="Amount"></div>
+    <label>Category</label>
+    <select id="kat" aria-label="Category"></select>
+    <input id="baru" class="hide" placeholder="New category name" maxlength="30">
+    <label for="tgl">Date</label><input type="date" id="tgl">
+    <label for="cat">Note</label><input id="cat" placeholder="Optional" maxlength="100">
+    <button id="simpan" class="btn">Save transaction</button>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+// --- Registrasi Service Worker ---
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed:', err));
+  });
+}
+
+// --- Setup & Konfigurasi API ---
+let CFG = null;
+try { CFG = JSON.parse(localStorage.getItem('trk_cfg')); } catch (e) {}
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const rp = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
+const short = v => v >= 1e6 ? (v / 1e6).toFixed(v % 1e6 ? 1 : 0) + 'M' : v >= 1e3 ? Math.round(v / 1e3) + 'K' : v;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today = () => new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+const PAL = ['#0e8991','#eaa27c','#5fb4ba','#c2693f','#a7c8cd','#d98a63','#2b6f78','#e8bba8','#7a9ea3','#f0c4a0'];
+const RED = ['#e11d48','#f43f5e','#fb7185','#be123c','#fda4af','#9f1239','#f87171','#dc2626'];
+const GRN = ['#16a34a','#22c55e','#4ade80','#15803d','#86efac','#166534','#34d399','#10b981'];
+const shade = (t, j) => (t === 'Pengeluaran' ? RED : GRN)[j % 8];
+const col = k => { let h = 0; for (const c of String(k)) h = (h * 31 + c.charCodeAt(0)) % 997; return PAL[h % PAL.length]; };
+const fdate = t => { const [y, m, d] = t.split('-'); return new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' }); };
+let S = { tab: 'home', tipe: 'Pengeluaran', kat: null, baru: false, ctipe: 'Pengeluaran', f: 'all', bulan: today().slice(0, 7), d: null }, ch = {};
+
+function toast(m, err) { const t = $('#toast'); t.textContent = m; t.className = 'show' + (err ? ' err' : ''); setTimeout(() => t.className = '', 2400); }
+
+function logout() {
+  try { localStorage.removeItem('trk_cfg'); } catch (e) {}
+  CFG = null;
+  $('#app-content').classList.add('hide');
+  $('#p-setup').classList.remove('hide');
+}
+
+// Fungsi fetch ke GAS (dengan Token & AbortController)
+const run = async (action, payload = {}) => {
+  if (!CFG || !CFG.url || !CFG.token) {
+    logout();
+    throw new Error('Incomplete configuration');
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000); // 15 detik timeout
+
+  try {
+    const response = await fetch(CFG.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // text/plain untuk hindari CORS preflight
+      body: JSON.stringify({ token: CFG.token, action, payload }),
+      signal: controller.signal,
+      redirect: 'follow'
+    });
+    
+    clearTimeout(timeout);
+    const res = await response.json();
+    
+    if (!res.ok) {
+      if (res.error === 'unauthorized') {
+        logout();
+        throw new Error('Token rejected. Please log in again.');
+      }
+      throw new Error(res.error || 'An error occurred');
+    }
+    return res.data;
+  } catch (err) {
+    clearTimeout(timeout);
+    if (err.name === 'AbortError') throw new Error('Connection timed out.');
+    throw err;
+  }
+};
+
+/* ---------- Setup Layar Pertama ---------- */
+$('#setup-toggle').onclick = (e) => {
+  const inp = $('#setup-token');
+  if (inp.type === 'password') { inp.type = 'text'; e.target.textContent = 'HIDE'; }
+  else { inp.type = 'password'; e.target.textContent = 'SHOW'; }
+};
+
+$('#setup-btn').onclick = async () => {
+  const url = $('#setup-url').value.trim();
+  const token = $('#setup-token').value.trim();
+  if (!url || !token) return toast('Please enter both URL and Token', true);
+  
+  const b = $('#setup-btn');
+  b.disabled = true;
+  b.innerHTML = '<span class="spin"></span>Connecting…';
+  
+  CFG = { url, token }; // Set sementara untuk run('ping')
+  try {
+    await run('ping'); // Test koneksi
+    try { localStorage.setItem('trk_cfg', JSON.stringify(CFG)); } catch (e) {}
+    toast('Connected!');
+    $('#p-setup').classList.add('hide');
+    $('#app-content').classList.remove('hide');
+    load(); // Mulai muat data
+  } catch (e) {
+    CFG = null;
+    toast(e.message, true);
+  }
+  b.disabled = false;
+  b.textContent = 'Connect';
+};
+
+$('#reset-cfg').onclick = () => { if (confirm('Are you sure you want to reset the connection?')) logout(); };
+
+/* ---------- Logika Aplikasi Utama ---------- */
+const cget = b => { try { return JSON.parse(localStorage.getItem('trk:' + b)); } catch (e) { return null; } };
+const cset = (b, d) => { try { localStorage.setItem('trk:' + b, JSON.stringify(d)); } catch (e) {} };
+let chartP = null;
+const loadChart = () => window.Chart ? Promise.resolve() : chartP || (chartP = new Promise((ok, no) => {
+  const x = document.createElement('script'); x.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+  x.onload = ok; x.onerror = () => { chartP = null; no(); }; document.head.appendChild(x);
+}));
+
+function seg(id, cb) {
+  $(id).onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $(id).querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    cb(b.dataset.v);
+  };
+}
+
+/* ---------- navigasi ---------- */
+function show(t) {
+  S.tab = t;
+  ['home', 'list', 'rep', 'tren'].forEach(x => $('#p-' + x).classList.toggle('hide', x !== t));
+  $$('nav button[data-t]').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  paint(); window.scrollTo(0, 0);
+}
+$$('nav button[data-t]').forEach(b => b.onclick = () => show(b.dataset.t));
+function shift(n) {
+  const [y, m] = S.bulan.split('-').map(Number), d = new Date(y, m - 1 + n, 1);
+  S.bulan = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); load();
+}
+$('#prev').onclick = () => shift(-1);
+$('#next').onclick = () => shift(1);
+
+/* ---------- render ---------- */
+const row = (t, i) => {
+  const neg = t.tipe === 'Pengeluaran';
+  return `<div class="tx" data-i="${i}"><i class="av ${neg ? 'neg' : 'pos'}">${esc(t.kat.charAt(0).toUpperCase())}</i><div class="tm"><b>${esc(t.kat)}</b><small>${esc(t.cat || fdate(t.tgl))}</small></div><span class="${neg ? 'neg' : 'pos'}">${neg ? '−' : '+'}${rp(t.nom)}</span><div class="act"><button class="del" data-del="${i}">Delete</button></div></div>`;
+};
+const EMPTY = '<div class="empty">No transactions this month yet. Tap + to add one.</div>';
+
+function renderHome() {
+  const d = S.d; if (!d) return;
+  const o = d.ringkasan.Pengeluaran, i = d.ringkasan.Pemasukan, k = d.kat.Pengeluaran;
+  const prev = d.trend.length > 1 ? d.trend[d.trend.length - 2].keluar : 0;
+  const p = prev > 0 ? Math.round((o - prev) / prev * 100) : null;
+  $('#hero').innerHTML = `<small>Expenses this month</small><div class="big"><span>Rp</span>${Math.round(o).toLocaleString('id-ID')}</div>`
+    + (p === null ? '' : `<div class="chg">${p > 0 ? '▲' : p < 0 ? '▼' : '•'} ${Math.abs(p)}% vs last month</div>`)
+    + `<div class="sbar">${k.length ? k.map((x, j) => `<i style="flex:${x[1]};background:${shade('Pengeluaran', j)}"></i>`).join('') : '<i style="flex:1;background:rgba(255,255,255,.18)"></i>'}</div>`
+    + `<div class="hrow"><div><small>Income</small><b>${rp(i)}</b></div><div><small>Balance</small><b>${rp(i - o)}</b></div></div>`;
+  const tot = o || 1, mx = k.length ? k[0][1] : 1;
+  $('#topk').innerHTML = k.length ? k.slice(0, 5).map((x, j) => `<div class="kb"><div><span>${esc(x[0])}</span><span>${rp(x[1])} <small>${Math.round(x[1] / tot * 100)}%</small></span></div><div class="track"><i style="width:${x[1] / mx * 100}%;background:${shade('Pengeluaran', j)}"></i></div></div>`).join('') : '<div class="empty">No expenses yet.</div>';
+  $('#recent').innerHTML = d.list.length ? d.list.slice(0, 5).map((t, j) => row(t, j)).join('') : EMPTY;
+}
+
+function renderList() {
+  const d = S.d; if (!d) return;
+  const l = d.list.map((t, i) => [t, i]).filter(x => S.f === 'all' || x[0].tipe === S.f);
+  let last = '', h = '';
+  l.forEach(([t, i]) => { if (t.tgl !== last) { last = t.tgl; h += `<div class="dh">${fdate(t.tgl)}</div>`; } h += `<div class="card" style="padding:0 14px;border-radius:14px;margin-bottom:6px">${row(t, i)}</div>`; });
+  $('#txs').innerHTML = h || EMPTY;
+}
+
+function setChart(k, cfg) { ch[k] && ch[k].destroy(); ch[k] = new Chart($('#' + k), cfg); }
+function chartBase() {
+  const cs = getComputedStyle(document.body);
+  Chart.defaults.font.family = '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+  Chart.defaults.color = cs.getPropertyValue('--mut'); Chart.defaults.borderColor = cs.getPropertyValue('--br');
+  return cs;
+}
+const yAxis = { ticks: { callback: short } };
+
+function renderRep() {
+  const d = S.d; if (!d) return;
+  const t = S.ctipe, k = d.kat[t], h = d.harian[t], tot = k.reduce((a, x) => a + x[1], 0) || 1;
+  $('#leg').innerHTML = k.length ? k.map((x, j) => `<div class="lg"><i style="background:${shade(t, j)}"></i><span>${esc(x[0])}</span><em>${Math.round(x[1] / tot * 100)}%</em><b>${rp(x[1])}</b></div>`).join('') : EMPTY;
+  if (S.tab !== 'rep') return;
+  if (!window.Chart) { loadChart().then(renderRep).catch(() => {}); return; }
+  const cs = chartBase();
+  setChart('c1', { type: 'doughnut', data: { labels: k.map(x => x[0]), datasets: [{ data: k.map(x => x[1]), backgroundColor: k.map((x, j) => shade(t, j)), borderWidth: 0 }] },
+    options: { maintainAspectRatio: false, cutout: '64%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + rp(c.parsed) } } } } });
+  setChart('c2', { type: 'bar', data: { labels: h.map((_, j) => j + 1), datasets: [{ data: h, backgroundColor: cs.getPropertyValue(t === 'Pengeluaran' ? '--out' : '--in'), borderRadius: 3 }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { title: c => 'Day ' + c[0].label, label: c => ' ' + rp(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: yAxis } } });
+}
+
+function renderTren() {
+  const d = S.d; if (!d) return;
+  const T = d.trend, bln = ym => new Date(ym.slice(0, 4), +ym.slice(5) - 1, 1).toLocaleDateString('en-US', { month: 'short' });
+  const avg = T.reduce((a, x) => a + x.keluar, 0) / T.length, mx = T.reduce((a, x) => x.keluar > a.keluar ? x : a, T[0]);
+  $('#tst').innerHTML = `<div class="card"><small>Avg. expense / month</small><b>${rp(avg)}</b></div><div class="card"><small>Highest expense</small><b>${mx.keluar ? rp(mx.keluar) + ' · ' + bln(mx.ym) : '-'}</b></div>`;
+  if (S.tab !== 'tren') return;
+  if (!window.Chart) { loadChart().then(renderTren).catch(() => {}); return; }
+  const cs = chartBase();
+  setChart('c3', { type: 'bar', data: { labels: T.map(x => bln(x.ym)), datasets: [
+    { label: 'Expense', data: T.map(x => x.keluar), backgroundColor: cs.getPropertyValue('--out'), borderRadius: 4 },
+    { label: 'Income', data: T.map(x => x.masuk), backgroundColor: cs.getPropertyValue('--in'), borderRadius: 4 }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => ' ' + c.dataset.label + ': ' + rp(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: yAxis } } });
+}
+
+function paint() {
+  const [y, m] = S.bulan.split('-');
+  $('#bln').textContent = new Date(y, m - 1, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  renderHome(); renderList(); renderRep(); renderTren(); drawChips();
+}
+function load() {
+  const c = cget(S.bulan);
+  if (c) { S.d = c; paint(); } else document.body.classList.add('busy');
+  
+  // Pola stale-while-revalidate
+  return run('load', { bulan: S.bulan }).then(d => { 
+    S.d = d; 
+    cset(S.bulan, d); 
+    paint(); 
+  })
+  .catch(e => {
+    if (CFG) toast(c ? 'Offline: showing cached data' : 'Failed to load: ' + (e.message || e), true);
+  })
+  .finally(() => document.body.classList.remove('busy'));
+}
+
+/* ---------- daftar & hapus ---------- */
+seg('#flt', v => { S.f = v; renderList(); });
+seg('#ctipe', v => { S.ctipe = v; renderRep(); });
+document.addEventListener('click', async e => {
+  const del = e.target.closest('[data-del]');
+  if (del) {
+    if (!del.classList.contains('sure')) { del.classList.add('sure'); del.textContent = 'Confirm delete?'; return; }
+    const t = S.d.list[+del.dataset.del]; del.disabled = true;
+    try { 
+      S.d = await run('hapus', { row: t.row, sig: [t.tgl, t.tipe, t.nom, t.kat].join('|'), bulan: S.bulan }); 
+      cset(S.bulan, S.d); paint(); toast('Transaction deleted'); 
+    } catch (err) { 
+      toast(err.message || 'Failed to delete', true); del.disabled = false; 
+    }
+    return;
+  }
+  const tx = e.target.closest('.tx');
+  if (tx) { const was = tx.classList.contains('open'); $$('.tx.open').forEach(x => x.classList.remove('open')); tx.classList.toggle('open', !was); }
+});
+
+/* ---------- form tambah ---------- */
+function sheet(open) { $('#sheet').classList.toggle('open', open); $('#bd').classList.toggle('open', open); }
+$('#add').onclick = () => { $('#tgl').value = $('#tgl').value || today(); sheet(true); };
+$('#close').onclick = $('#bd').onclick = () => sheet(false);
+seg('#tipe', v => { S.tipe = v; S.kat = null; S.baru = false; drawChips(); });
+
+function drawChips() {
+  const l = S.d ? S.d.kategori[S.tipe] : [], i = S.kat === null ? -1 : l.indexOf(S.kat);
+  $('#kat').innerHTML = '<option value="" disabled>Select category</option>'
+    + l.map((k, j) => `<option value="${j}">${esc(k)}</option>`).join('') + '<option value="new">+ New category…</option>';
+  $('#kat').value = S.baru ? 'new' : i >= 0 ? String(i) : '';
+  $('#baru').classList.toggle('hide', !S.baru);
+}
+$('#kat').onchange = e => {
+  const v = e.target.value;
+  if (v === 'new') { S.baru = true; S.kat = null; drawChips(); $('#baru').focus(); }
+  else { S.baru = false; S.kat = S.d.kategori[S.tipe][+v]; drawChips(); }
+};
+$('#nom').oninput = e => { const n = e.target.value.replace(/\D/g, '').replace(/^0+/, ''); e.target.value = n ? (+n).toLocaleString('id-ID') : ''; };
+
+$('#simpan').onclick = async () => {
+  const nominal = +$('#nom').value.replace(/\D/g, ''), kategori = S.baru ? $('#baru').value.trim() : S.kat;
+  if (!nominal) return toast('Please enter an amount first', true);
+  if (!kategori) return toast('Please select or add a category', true);
+  const b = $('#simpan'); b.disabled = true; sheet(false); toast('Saving…');
+  try {
+    S.d = await run('tambah', { data: { tipe: S.tipe, nominal, kategori, tanggal: $('#tgl').value, catatan: $('#cat').value.trim() }, bulan: S.bulan });
+    $('#nom').value = ''; $('#cat').value = ''; $('#baru').value = ''; S.baru = false; S.kat = null;
+    cset(S.bulan, S.d); sheet(false); paint(); toast('Transaction saved');
+  } catch (e) { 
+    toast((e && e.message) || 'Failed to save, please try again', true); sheet(true); 
+  }
+  b.disabled = false;
+};
+
+// --- Inisialisasi ---
+$('#tgl').value = today();
+if (!CFG) {
+  $('#app-content').classList.add('hide');
+  $('#p-setup').classList.remove('hide');
+} else {
+  load();
+}
+
+window.addEventListener('load', () => setTimeout(() => loadChart().catch(() => {}), 1200));
+</script>
+</body>
+</html>
