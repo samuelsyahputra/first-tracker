@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="color-scheme" content="light only">
+<meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#e8f1f0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,7 +18,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <title>Expense Tracker</title>
 <style>
-:root{color-scheme:light;--bg:#e8f1f0;--b1:rgba(234,162,124,.7);--b2:rgba(14,137,145,.32);--b3:rgba(141,182,188,.75);--card:rgba(255,255,255,.55);--gb:rgba(255,255,255,.8);--tx:#0c313a;--mut:#55767b;--br:rgba(12,49,58,.12);--sheet:rgba(240,248,247,.8);--navbg:rgba(255,255,255,.6);--hero:linear-gradient(135deg,#0c313a 0%,#0e8991 100%);--htx:#fff;--hmut:rgba(255,255,255,.74);--fab:linear-gradient(135deg,#eaa27c,#e8bba8);--fabtx:#0c313a;--out:#e11d48;--in:#16a34a;--ac:#0b7a82;--on:#fff}
+:root{color-scheme:only light;--bg:#e8f1f0;--b1:rgba(234,162,124,.7);--b2:rgba(14,137,145,.32);--b3:rgba(141,182,188,.75);--card:rgba(255,255,255,.55);--gb:rgba(255,255,255,.8);--tx:#0c313a;--mut:#55767b;--br:rgba(12,49,58,.12);--sheet:rgba(240,248,247,.8);--navbg:rgba(255,255,255,.6);--hero:linear-gradient(135deg,#0c313a 0%,#0e8991 100%);--htx:#fff;--hmut:rgba(255,255,255,.74);--fab:linear-gradient(135deg,#eaa27c,#e8bba8);--fabtx:#0c313a;--out:#e11d48;--in:#16a34a;--ac:#0b7a82;--on:#fff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 "Plus Jakarta Sans",system-ui,-apple-system,sans-serif;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 .hide{display:none!important}
@@ -48,6 +48,7 @@ section>h2{font-size:15px;margin:22px 0 8px;font-weight:700}
 .tx{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--br)}
 .tx:last-child{border:0}
 .av{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-style:normal}
+.av.em{font-size:20px;font-weight:400;line-height:1}
 .tm small{display:block;color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:46vw}
 .neg{color:var(--out);font-weight:700}.pos{color:var(--in);font-weight:700}
 .act{grid-column:1/-1;display:none;justify-content:flex-end}
@@ -59,12 +60,19 @@ section>h2{font-size:15px;margin:22px 0 8px;font-weight:700}
 .seg button{flex:1;border:0;background:none;color:var(--mut);padding:9px;border-radius:9px;font-weight:600}
 .seg button.on{background:var(--ac);color:var(--on)}
 .cv{position:relative;height:210px}
+.cv-donut{height:230px}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;padding:0 26%}
+.donut-center small{font-size:11px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.35px}
+.donut-center b{font-size:16px;font-weight:800;color:var(--tx);line-height:1.2;margin-top:2px;word-break:break-word}
 .lg{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--br)}
 .lg i{width:12px;height:12px;border-radius:4px;flex:none}
 .lg span{flex:1}.lg em{color:var(--mut);font-style:normal;font-size:13px}
 .empty{color:var(--mut);text-align:center;padding:26px 8px}
 .st{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .st small{display:block;color:var(--mut);font-size:12px}
+.tren-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px}
+.tren-head h2{margin:0;font-size:15px;font-weight:700}
+.tren-sub{font-size:12px;color:var(--mut)}
 nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;background:var(--navbg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--br);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
 nav button{border:0;background:none;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;padding:6px 0}
 nav button.on{color:var(--ac)}
@@ -89,7 +97,13 @@ input:focus,select:focus,button:focus-visible{outline:2px solid var(--ac);outlin
 .chip{padding:9px 14px;border-radius:99px;border:1px solid var(--gb);background:var(--card)}
 .chip.add{border-style:dashed;color:var(--mut)}
 .chip.on{background:var(--ac);border-color:var(--ac);color:var(--on)}
-#baru{margin-top:10px}
+#baru-wrap{margin-top:10px}
+.epick{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:6px}
+.eb{height:38px;border:1px solid var(--gb);border-radius:10px;background:var(--card);font-size:18px;display:grid;place-items:center;padding:0;transition:.15s}
+.eb.on{background:var(--ac);border-color:var(--ac);transform:scale(1.06)}
+.ecust{display:flex;align-items:center;gap:10px;margin-top:10px}
+.ecust span{font-size:13px;color:var(--mut);white-space:nowrap}
+.ecust input{width:72px;text-align:center;padding:8px;font-size:18px}
 .btn{width:100%;margin-top:22px;padding:15px;border:0;border-radius:14px;background:var(--hero);color:var(--htx);font-weight:700;font-size:17px;box-shadow:0 8px 20px rgba(14,137,145,.35);display:inline-flex;align-items:center;justify-content:center;gap:10px}
 .btn:disabled{opacity:.65}
 .spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
@@ -109,7 +123,8 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 #p-setup p{color:var(--mut);text-align:center;font-size:14px;margin-bottom:24px}
 #p-setup .pwd-wrap{position:relative}
 #p-setup .pwd-wrap button{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--ac);font-weight:bold;font-size:13px}
-.cfg-reset{margin:20px auto 0;display:block;background:none;border:1px solid var(--gb);padding:8px 16px;border-radius:10px;color:var(--mut);font-size:13px}
+.cfg-reset{margin:20px auto 0;display:block;background:none;border:1px solid var(--gb);padding:8px 16px;border-radius:10px;color:var(--mut);font-size:13px;transition:.15s}
+.cfg-reset.sure{border-color:var(--out);background:var(--out);color:#fff}
 </style>
 </head>
 <body>
@@ -149,14 +164,28 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
 
     <section id="p-rep" class="hide">
       <div class="seg" id="ctipe"><button data-v="Pengeluaran" class="on">Expense</button><button data-v="Pemasukan">Income</button></div>
-      <div class="card"><div class="cv"><canvas id="c1"></canvas></div></div>
+      <div class="card">
+        <div class="cv cv-donut">
+          <canvas id="c1"></canvas>
+          <div class="donut-center" id="c1-center"></div>
+        </div>
+      </div>
       <div id="leg"></div>
       <h2>Daily</h2>
-      <div class="card"><div class="cv"><canvas id="c2"></canvas></div></div>
+      <div class="card"><div class="cv" id="c2-wrap"><canvas id="c2"></canvas></div></div>
     </section>
 
     <section id="p-tren" class="hide">
-      <h2>Last 6 months</h2>
+      <div class="seg" id="trange">
+        <button data-v="1m">1M</button>
+        <button data-v="3m" class="on">3M</button>
+        <button data-v="6m">6M</button>
+        <button data-v="1y">1Y</button>
+      </div>
+      <div class="tren-head">
+        <h2 id="tren-title">Last 3 months</h2>
+        <span class="tren-sub" id="tren-sub">Monthly</span>
+      </div>
       <div class="card"><div class="cv"><canvas id="c3"></canvas></div></div>
       <div class="st" id="tst"></div>
       <button id="reset-cfg" class="cfg-reset">Reset API Settings</button>
@@ -178,7 +207,15 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-grad
     <div class="amt"><span>Rp</span><input id="nom" inputmode="numeric" placeholder="0" autocomplete="off" aria-label="Amount"></div>
     <label>Category</label>
     <select id="kat" aria-label="Category"></select>
-    <input id="baru" class="hide" placeholder="New category name" maxlength="30">
+    <div id="baru-wrap" class="hide">
+      <input id="baru" placeholder="New category name" maxlength="30">
+      <label style="margin-top:12px">Category icon (Emoji)</label>
+      <div class="epick" id="epick"></div>
+      <div class="ecust">
+        <span>Or custom emoji:</span>
+        <input id="ikon-custom" placeholder="😀" maxlength="8" autocomplete="off" aria-label="Custom emoji">
+      </div>
+    </div>
     <label for="tgl">Date</label><input type="date" id="tgl">
     <label for="cat">Note</label><input id="cat" placeholder="Optional" maxlength="100">
     <button id="simpan" class="btn">Save transaction</button>
@@ -203,13 +240,40 @@ const rp = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
 const short = v => v >= 1e6 ? (v / 1e6).toFixed(v % 1e6 ? 1 : 0) + 'M' : v >= 1e3 ? Math.round(v / 1e3) + 'K' : v;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const today = () => new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
-const PAL = ['#0e8991','#eaa27c','#5fb4ba','#c2693f','#a7c8cd','#d98a63','#2b6f78','#e8bba8','#7a9ea3','#f0c4a0'];
-const RED = ['#e11d48','#f43f5e','#fb7185','#be123c','#fda4af','#9f1239','#f87171','#dc2626'];
-const GRN = ['#16a34a','#22c55e','#4ade80','#15803d','#86efac','#166534','#34d399','#10b981'];
-const shade = (t, j) => (t === 'Pengeluaran' ? RED : GRN)[j % 8];
-const col = k => { let h = 0; for (const c of String(k)) h = (h * 31 + c.charCodeAt(0)) % 997; return PAL[h % PAL.length]; };
+
+// Palet warna berbeda untuk tiap kategori (kontras baik di hero gelap maupun kartu terang)
+const CAT_PAL = [
+  '#f59e0b', // amber
+  '#f43f5e', // rose
+  '#0ea5e9', // sky
+  '#8b5cf6', // violet
+  '#10b981', // emerald
+  '#f97316', // orange
+  '#ec4899', // pink
+  '#14b8a6', // teal
+  '#6366f1', // indigo
+  '#84cc16', // lime
+  '#06b6d4', // cyan
+  '#d946ef'  // fuchsia
+];
+const catCol = j => CAT_PAL[j % CAT_PAL.length];
+
+// Preset emoji untuk kategori baru
+const EMOJI_PRESET = {
+  Pengeluaran: ['🍔','☕','🚗','🛒','🧾','🎬','💊','🏠','👕','📱','✈️','🎓','🎁','🐾','⚡','📦'],
+  Pemasukan: ['💰','🎁','💵','💼','📈','🏦','🪙','🎉','💎','✨']
+};
+
+// Helper menggeser YYYY-MM sebesar n bulan
+const shiftYm = (ym, n) => {
+  const [y, m] = ym.split('-').map(Number);
+  const d = new Date(y, m - 1 + n, 1);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+};
+
 const fdate = t => { const [y, m, d] = t.split('-'); return new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' }); };
-let S = { tab: 'home', tipe: 'Pengeluaran', kat: null, baru: false, ctipe: 'Pengeluaran', f: 'all', bulan: today().slice(0, 7), d: null }, ch = {};
+let S = { tab: 'home', tipe: 'Pengeluaran', kat: null, baru: false, ikon: '', ctipe: 'Pengeluaran', trange: '3m', f: 'all', bulan: today().slice(0, 7), d: null }, ch = {};
+let trenReqId = 0;
 
 function toast(m, err) { const t = $('#toast'); t.textContent = m; t.className = 'show' + (err ? ' err' : ''); setTimeout(() => t.className = '', 2400); }
 
@@ -288,7 +352,25 @@ $('#setup-btn').onclick = async () => {
   b.textContent = 'Connect';
 };
 
-$('#reset-cfg').onclick = () => { if (confirm('Are you sure you want to reset the connection?')) logout(); };
+// Konfirmasi 2 klik untuk reset API (tanpa confirm())
+let resetTimer = null;
+$('#reset-cfg').onclick = (e) => {
+  const b = e.currentTarget;
+  if (!b.classList.contains('sure')) {
+    b.classList.add('sure');
+    b.textContent = 'Tap again to confirm reset';
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      b.classList.remove('sure');
+      b.textContent = 'Reset API Settings';
+    }, 3500);
+    return;
+  }
+  clearTimeout(resetTimer);
+  b.classList.remove('sure');
+  b.textContent = 'Reset API Settings';
+  logout();
+};
 
 /* ---------- Logika Aplikasi Utama ---------- */
 const cget = b => { try { return JSON.parse(localStorage.getItem('trk:' + b)); } catch (e) { return null; } };
@@ -316,16 +398,20 @@ function show(t) {
 }
 $$('nav button[data-t]').forEach(b => b.onclick = () => show(b.dataset.t));
 function shift(n) {
-  const [y, m] = S.bulan.split('-').map(Number), d = new Date(y, m - 1 + n, 1);
-  S.bulan = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); load();
+  S.bulan = shiftYm(S.bulan, n);
+  load();
 }
 $('#prev').onclick = () => shift(-1);
 $('#next').onclick = () => shift(1);
 
 /* ---------- render ---------- */
+const getIkon = (tipe, kat) => (S.d && S.d.ikon && S.d.ikon[tipe] && S.d.ikon[tipe][kat]) || '';
+const katLabel = (tipe, kat) => { const ik = getIkon(tipe, kat); return (ik ? esc(ik) + ' ' : '') + esc(kat); };
+
 const row = (t, i) => {
   const neg = t.tipe === 'Pengeluaran';
-  return `<div class="tx" data-i="${i}"><i class="av ${neg ? 'neg' : 'pos'}">${esc(t.kat.charAt(0).toUpperCase())}</i><div class="tm"><b>${esc(t.kat)}</b><small>${esc(t.cat || fdate(t.tgl))}</small></div><span class="${neg ? 'neg' : 'pos'}">${neg ? '−' : '+'}${rp(t.nom)}</span><div class="act"><button class="del" data-del="${i}">Delete</button></div></div>`;
+  const ik = getIkon(t.tipe, t.kat);
+  return `<div class="tx" data-i="${i}"><i class="av ${neg ? 'neg' : 'pos'}${ik ? ' em' : ''}">${esc(ik || t.kat.charAt(0).toUpperCase())}</i><div class="tm"><b>${esc(t.kat)}</b><small>${esc(t.cat || fdate(t.tgl))}</small></div><span class="${neg ? 'neg' : 'pos'}">${neg ? '−' : '+'}${rp(t.nom)}</span><div class="act"><button class="del" data-del="${i}">Delete</button></div></div>`;
 };
 const EMPTY = '<div class="empty">No transactions this month yet. Tap + to add one.</div>';
 
@@ -334,12 +420,16 @@ function renderHome() {
   const o = d.ringkasan.Pengeluaran, i = d.ringkasan.Pemasukan, k = d.kat.Pengeluaran;
   const prev = d.trend.length > 1 ? d.trend[d.trend.length - 2].keluar : 0;
   const p = prev > 0 ? Math.round((o - prev) / prev * 100) : null;
+
+  // Scorecard Hero: tiap segmen bar chart menggunakan warna berbeda per kategori
   $('#hero').innerHTML = `<small>Expenses this month</small><div class="big"><span>Rp</span>${Math.round(o).toLocaleString('id-ID')}</div>`
     + (p === null ? '' : `<div class="chg">${p > 0 ? '▲' : p < 0 ? '▼' : '•'} ${Math.abs(p)}% vs last month</div>`)
-    + `<div class="sbar">${k.length ? k.map((x, j) => `<i style="flex:${x[1]};background:${shade('Pengeluaran', j)}"></i>`).join('') : '<i style="flex:1;background:rgba(255,255,255,.18)"></i>'}</div>`
+    + `<div class="sbar">${k.length ? k.map((x, j) => `<i style="flex:${x[1]};background:${catCol(j)}"></i>`).join('') : '<i style="flex:1;background:rgba(255,255,255,.18)"></i>'}</div>`
     + `<div class="hrow"><div><small>Income</small><b>${rp(i)}</b></div><div><small>Balance</small><b>${rp(i - o)}</b></div></div>`;
-  const tot = o || 1, mx = k.length ? k[0][1] : 1;
-  $('#topk').innerHTML = k.length ? k.slice(0, 5).map((x, j) => `<div class="kb"><div><span>${esc(x[0])}</span><span>${rp(x[1])} <small>${Math.round(x[1] / tot * 100)}%</small></span></div><div class="track"><i style="width:${x[1] / mx * 100}%;background:${shade('Pengeluaran', j)}"></i></div></div>`).join('') : '<div class="empty">No expenses yet.</div>';
+
+  // Expenses by category: persentase dihilangkan, warna bar dibedakan tiap kategori
+  const mx = k.length ? k[0][1] : 1;
+  $('#topk').innerHTML = k.length ? k.slice(0, 5).map((x, j) => `<div class="kb"><div><span>${katLabel('Pengeluaran', x[0])}</span><span>${rp(x[1])}</span></div><div class="track"><i style="width:${x[1] / mx * 100}%;background:${catCol(j)}"></i></div></div>`).join('') : '<div class="empty">No expenses yet.</div>';
   $('#recent').innerHTML = d.list.length ? d.list.slice(0, 5).map((t, j) => row(t, j)).join('') : EMPTY;
 }
 
@@ -358,33 +448,168 @@ function chartBase() {
   Chart.defaults.color = cs.getPropertyValue('--mut'); Chart.defaults.borderColor = cs.getPropertyValue('--br');
   return cs;
 }
-const yAxis = { ticks: { callback: short } };
+const valAxis = { ticks: { callback: short } };
 
 function renderRep() {
   const d = S.d; if (!d) return;
-  const t = S.ctipe, k = d.kat[t], h = d.harian[t], tot = k.reduce((a, x) => a + x[1], 0) || 1;
-  $('#leg').innerHTML = k.length ? k.map((x, j) => `<div class="lg"><i style="background:${shade(t, j)}"></i><span>${esc(x[0])}</span><em>${Math.round(x[1] / tot * 100)}%</em><b>${rp(x[1])}</b></div>`).join('') : EMPTY;
+  const t = S.ctipe, k = d.kat[t], h = d.harian[t];
+  const rawTot = k.reduce((a, x) => a + x[1], 0), tot = rawTot || 1;
+
+  // Legend & teks tengah donat (menampilkan total biaya)
+  $('#leg').innerHTML = k.length ? k.map((x, j) => `<div class="lg"><i style="background:${catCol(j)}"></i><span>${katLabel(t, x[0])}</span><em>${Math.round(x[1] / tot * 100)}%</em><b>${rp(x[1])}</b></div>`).join('') : EMPTY;
+  $('#c1-center').innerHTML = k.length ? `<small>${t === 'Pengeluaran' ? 'Total Expense' : 'Total Income'}</small><b>${rp(rawTot)}</b>` : '';
+
   if (S.tab !== 'rep') return;
   if (!window.Chart) { loadChart().then(renderRep).catch(() => {}); return; }
   const cs = chartBase();
-  setChart('c1', { type: 'doughnut', data: { labels: k.map(x => x[0]), datasets: [{ data: k.map(x => x[1]), backgroundColor: k.map((x, j) => shade(t, j)), borderWidth: 0 }] },
-    options: { maintainAspectRatio: false, cutout: '64%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + rp(c.parsed) } } } } });
-  setChart('c2', { type: 'bar', data: { labels: h.map((_, j) => j + 1), datasets: [{ data: h, backgroundColor: cs.getPropertyValue(t === 'Pengeluaran' ? '--out' : '--in'), borderRadius: 3 }] },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { title: c => 'Day ' + c[0].label, label: c => ' ' + rp(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: yAxis } } });
+
+  // Donut chart dengan warna berbeda tiap kategori
+  setChart('c1', {
+    type: 'doughnut',
+    data: {
+      labels: k.map(x => x[0]),
+      datasets: [{ data: k.map(x => x[1]), backgroundColor: k.map((x, j) => catCol(j)), borderWidth: 0 }]
+    },
+    options: {
+      maintainAspectRatio: false,
+      cutout: '68%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + rp(c.parsed) } } }
+    }
+  });
+
+  // Daily bar chart dengan axis X (nominal) dan Y (tanggal) ditukar (horizontal bar)
+  $('#c2-wrap').style.height = Math.max(260, h.length * 18) + 'px';
+  setChart('c2', {
+    type: 'bar',
+    data: {
+      labels: h.map((_, j) => j + 1),
+      datasets: [{ data: h, backgroundColor: cs.getPropertyValue(t === 'Pengeluaran' ? '--out' : '--in'), borderRadius: 3 }]
+    },
+    options: {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { title: c => 'Day ' + c[0].label, label: c => ' ' + rp(c.parsed.x) } }
+      },
+      scales: {
+        x: valAxis,
+        y: { grid: { display: false }, ticks: { autoSkip: false, font: { size: 11 } } }
+      }
+    }
+  });
 }
 
-function renderTren() {
-  const d = S.d; if (!d) return;
-  const T = d.trend, bln = ym => new Date(ym.slice(0, 4), +ym.slice(5) - 1, 1).toLocaleDateString('en-US', { month: 'short' });
-  const avg = T.reduce((a, x) => a + x.keluar, 0) / T.length, mx = T.reduce((a, x) => x.keluar > a.keluar ? x : a, T[0]);
-  $('#tst').innerHTML = `<div class="card"><small>Avg. expense / month</small><b>${rp(avg)}</b></div><div class="card"><small>Highest expense</small><b>${mx.keluar ? rp(mx.keluar) + ' · ' + bln(mx.ym) : '-'}</b></div>`;
+// Helper mengambil gabungan 12 bulan untuk mode 1Y tanpa ubah backend GAS
+async function getYearTrend(currentYm, currentTrend) {
+  const prevYm = shiftYm(currentYm, -6);
+  let prevData = cget(prevYm);
+  if (!prevData) {
+    prevData = await run('load', { bulan: prevYm });
+    cset(prevYm, prevData);
+  }
+  const map = new Map();
+  (prevData && prevData.trend ? prevData.trend : []).forEach(x => map.set(x.ym, x));
+  currentTrend.forEach(x => map.set(x.ym, x));
+  return [...map.values()].sort((a, b) => a.ym.localeCompare(b.ym)).slice(-12);
+}
+
+function drawTrenChart(labels, outData, inData, tipTitleCb) {
   if (S.tab !== 'tren') return;
   if (!window.Chart) { loadChart().then(renderTren).catch(() => {}); return; }
   const cs = chartBase();
-  setChart('c3', { type: 'bar', data: { labels: T.map(x => bln(x.ym)), datasets: [
-    { label: 'Expense', data: T.map(x => x.keluar), backgroundColor: cs.getPropertyValue('--out'), borderRadius: 4 },
-    { label: 'Income', data: T.map(x => x.masuk), backgroundColor: cs.getPropertyValue('--in'), borderRadius: 4 }] },
-    options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: c => ' ' + c.dataset.label + ': ' + rp(c.parsed.y) } } }, scales: { x: { grid: { display: false } }, y: yAxis } } });
+  setChart('c3', {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Expense', data: outData, backgroundColor: cs.getPropertyValue('--out'), borderRadius: 4 },
+        { label: 'Income', data: inData, backgroundColor: cs.getPropertyValue('--in'), borderRadius: 4 }
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            title: tipTitleCb,
+            label: c => ' ' + c.dataset.label + ': ' + rp(c.parsed.y)
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, font: { size: 11 } } },
+        y: valAxis
+      }
+    }
+  });
+}
+
+async function renderTren() {
+  const d = S.d; if (!d) return;
+  const reqId = ++trenReqId;
+  const range = S.trange;
+  const fmtMon = (ym, withYear) => new Date(ym.slice(0, 4), +ym.slice(5) - 1, 1)
+    .toLocaleDateString('en-US', withYear ? { month: 'short', year: '2-digit' } : { month: 'short' });
+
+  // Mode 1 Bulan Terakhir (Harian)
+  if (range === '1m') {
+    $('#tren-title').textContent = 'Last 1 month';
+    $('#tren-sub').textContent = 'Daily';
+    const outArr = d.harian.Pengeluaran || [];
+    const inArr = d.harian.Pemasukan || [];
+    const len = Math.max(outArr.length, inArr.length);
+    const labels = Array.from({ length: len }, (_, j) => String(j + 1));
+    const avg = len ? outArr.reduce((a, v) => a + v, 0) / len : 0;
+    let maxVal = 0, maxDay = 0;
+    outArr.forEach((v, j) => { if (v > maxVal) { maxVal = v; maxDay = j + 1; } });
+
+    $('#tst').innerHTML = `<div class="card"><small>Avg. expense / day</small><b>${rp(avg)}</b></div>`
+      + `<div class="card"><small>Highest expense</small><b>${maxVal ? rp(maxVal) + ' · Day ' + maxDay : '-'}</b></div>`;
+    drawTrenChart(labels, outArr, inArr, c => 'Day ' + c[0].label);
+    return;
+  }
+
+  // Mode Bulanan (3M, 6M, 1Y)
+  const meta = { '3m': ['Last 3 months', 3], '6m': ['Last 6 months', 6], '1y': ['Last 1 year', 12] };
+  $('#tren-title').textContent = meta[range][0];
+  $('#tren-sub').textContent = range === '1y' ? 'Loading…' : 'Monthly';
+
+  let T = d.trend || [];
+  if (range === '3m') {
+    T = T.slice(-3);
+  } else if (range === '6m') {
+    T = T.slice(-6);
+  } else if (range === '1y') {
+    try {
+      T = await getYearTrend(S.bulan, T);
+      if (reqId !== trenReqId) return; // Abaikan jika user sudah pindah tab/bulan/rentang
+      $('#tren-sub').textContent = 'Monthly';
+    } catch (e) {
+      if (reqId !== trenReqId) return;
+      $('#tren-sub').textContent = 'Showing 6m (offline)';
+      toast('Could not load full year data', true);
+    }
+  }
+
+  if (!T.length) {
+    $('#tst').innerHTML = '';
+    return;
+  }
+
+  const avg = T.reduce((a, x) => a + x.keluar, 0) / T.length;
+  const mx = T.reduce((a, x) => x.keluar > a.keluar ? x : a, T[0]);
+  const showYr = range === '1y';
+  $('#tst').innerHTML = `<div class="card"><small>Avg. expense / month</small><b>${rp(avg)}</b></div>`
+    + `<div class="card"><small>Highest expense</small><b>${mx.keluar ? rp(mx.keluar) + ' · ' + fmtMon(mx.ym, showYr) : '-'}</b></div>`;
+
+  drawTrenChart(
+    T.map(x => fmtMon(x.ym, false)),
+    T.map(x => x.keluar),
+    T.map(x => x.masuk),
+    c => fmtMon(T[c[0].dataIndex].ym, true)
+  );
 }
 
 function paint() {
@@ -411,6 +636,8 @@ function load() {
 /* ---------- daftar & hapus ---------- */
 seg('#flt', v => { S.f = v; renderList(); });
 seg('#ctipe', v => { S.ctipe = v; renderRep(); });
+seg('#trange', v => { S.trange = v; renderTren(); });
+
 document.addEventListener('click', async e => {
   const del = e.target.closest('[data-del]');
   if (del) {
@@ -432,19 +659,40 @@ document.addEventListener('click', async e => {
 function sheet(open) { $('#sheet').classList.toggle('open', open); $('#bd').classList.toggle('open', open); }
 $('#add').onclick = () => { $('#tgl').value = $('#tgl').value || today(); sheet(true); };
 $('#close').onclick = $('#bd').onclick = () => sheet(false);
-seg('#tipe', v => { S.tipe = v; S.kat = null; S.baru = false; drawChips(); });
+seg('#tipe', v => { S.tipe = v; S.kat = null; S.baru = false; S.ikon = ''; $('#ikon-custom').value = ''; drawChips(); });
+
+function drawEmojiPicker() {
+  const list = EMOJI_PRESET[S.tipe] || EMOJI_PRESET.Pengeluaran;
+  $('#epick').innerHTML = list.map(em => `<button type="button" class="eb${S.ikon === em ? ' on' : ''}" data-em="${em}">${em}</button>`).join('');
+}
+
+$('#epick').onclick = e => {
+  const b = e.target.closest('.eb'); if (!b) return;
+  S.ikon = S.ikon === b.dataset.em ? '' : b.dataset.em;
+  $('#ikon-custom').value = '';
+  drawEmojiPicker();
+};
+
+$('#ikon-custom').oninput = e => {
+  S.ikon = e.target.value.trim();
+  $$('#epick .eb.on').forEach(x => x.classList.remove('on'));
+};
 
 function drawChips() {
   const l = S.d ? S.d.kategori[S.tipe] : [], i = S.kat === null ? -1 : l.indexOf(S.kat);
   $('#kat').innerHTML = '<option value="" disabled>Select category</option>'
-    + l.map((k, j) => `<option value="${j}">${esc(k)}</option>`).join('') + '<option value="new">+ New category…</option>';
+    + l.map((k, j) => {
+        const ik = getIkon(S.tipe, k);
+        return `<option value="${j}">${ik ? esc(ik) + ' ' : ''}${esc(k)}</option>`;
+      }).join('') + '<option value="new">+ New category…</option>';
   $('#kat').value = S.baru ? 'new' : i >= 0 ? String(i) : '';
-  $('#baru').classList.toggle('hide', !S.baru);
+  $('#baru-wrap').classList.toggle('hide', !S.baru);
+  if (S.baru) drawEmojiPicker();
 }
 $('#kat').onchange = e => {
   const v = e.target.value;
-  if (v === 'new') { S.baru = true; S.kat = null; drawChips(); $('#baru').focus(); }
-  else { S.baru = false; S.kat = S.d.kategori[S.tipe][+v]; drawChips(); }
+  if (v === 'new') { S.baru = true; S.kat = null; S.ikon = ''; $('#ikon-custom').value = ''; drawChips(); $('#baru').focus(); }
+  else { S.baru = false; S.kat = S.d.kategori[S.tipe][+v]; S.ikon = ''; drawChips(); }
 };
 $('#nom').oninput = e => { const n = e.target.value.replace(/\D/g, '').replace(/^0+/, ''); e.target.value = n ? (+n).toLocaleString('id-ID') : ''; };
 
@@ -454,8 +702,17 @@ $('#simpan').onclick = async () => {
   if (!kategori) return toast('Please select or add a category', true);
   const b = $('#simpan'); b.disabled = true; sheet(false); toast('Saving…');
   try {
-    S.d = await run('tambah', { data: { tipe: S.tipe, nominal, kategori, tanggal: $('#tgl').value, catatan: $('#cat').value.trim() }, bulan: S.bulan });
-    $('#nom').value = ''; $('#cat').value = ''; $('#baru').value = ''; S.baru = false; S.kat = null;
+    const payloadData = {
+      tipe: S.tipe,
+      nominal,
+      kategori,
+      tanggal: $('#tgl').value,
+      catatan: $('#cat').value.trim()
+    };
+    if (S.baru && S.ikon) payloadData.ikon = S.ikon;
+    S.d = await run('tambah', { data: payloadData, bulan: S.bulan });
+    $('#nom').value = ''; $('#cat').value = ''; $('#baru').value = ''; $('#ikon-custom').value = '';
+    S.baru = false; S.kat = null; S.ikon = '';
     cset(S.bulan, S.d); sheet(false); paint(); toast('Transaction saved');
   } catch (e) { 
     toast((e && e.message) || 'Failed to save, please try again', true); sheet(true); 
