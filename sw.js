@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trk-v2';
+const CACHE_NAME = 'trk-v3';
 const ASSETS = [
   './',
   './index.html',
